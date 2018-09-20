@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.description   = %q{Filter plugin to add Docker metadata for use with Elasticsearch}
   gem.summary       = %q{Filter plugin to add Docker metadata for use with Elasticsearch}
   gem.homepage      = "https://github.com/zsoltf/fluent-plugin-docker_metadata_elastic_filter"
-  gem.license       = "ASL2"
+  gem.license       = "Apache-2.0"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}) { |f| File.basename(f) }
