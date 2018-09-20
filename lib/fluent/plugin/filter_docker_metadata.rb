@@ -68,7 +68,9 @@ module Fluent::Plugin
               'container_hostname' => metadata['Config']['Hostname'],
               'image' => metadata['Config']['Image'],
               'image_id' => metadata['Image'],
-              'labels' => metadata['Config']['Labels'].map {|k,v| Hash[k.gsub('.','_'),v]}.inject({}, :merge)
+              'labels' => metadata['Config']['Labels'].map {|k,v| Hash[k.gsub('.','_'),v]}.inject({}, :merge),
+              'state' => metadata['State'],
+              'restart_count' => metadata['RestartCount']
             }
             new_es.add(time, record)
           }
