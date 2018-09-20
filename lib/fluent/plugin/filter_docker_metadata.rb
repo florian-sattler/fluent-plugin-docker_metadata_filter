@@ -19,8 +19,8 @@
 require 'fluent/plugin/filter'
 
 module Fluent::Plugin
-  class DockerMetadataFilter < Fluent::Plugin::Filter
-    Fluent::Plugin.register_filter('docker_metadata', self)
+  class DockerMetadataElasticFilter < Fluent::Plugin::Filter
+    Fluent::Plugin.register_filter('docker_metadata_elastic', self)
 
     config_param :docker_url, :string,  :default => 'unix:///var/run/docker.sock'
     config_param :cache_size, :integer, :default => 100
@@ -56,7 +56,7 @@ module Fluent::Plugin
       container_id = tag.match(@container_id_regexp_compiled)
       if container_id && container_id[0]
         container_id = container_id[0]
-        metadata = @cache.getset(container_id){DockerMetadataFilter.get_metadata(container_id)}
+        metadata = @cache.getset(container_id){DockerMetadataElasticFilter.get_metadata(container_id)}
 
         if metadata
           new_es = Fluent::MultiEventStream.new
@@ -68,7 +68,7 @@ module Fluent::Plugin
               'container_hostname' => metadata['Config']['Hostname'],
               'image' => metadata['Config']['Image'],
               'image_id' => metadata['Image'],
-              'labels' => metadata['Config']['Labels']
+              'labels' => metadata['Config']['Labels'].map {|k,v| Hash[k.gsub('.','_'),v]}.inject({}, :merge)
             }
             new_es.add(time, record)
           }
