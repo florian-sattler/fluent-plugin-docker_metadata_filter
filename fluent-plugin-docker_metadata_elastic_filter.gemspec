@@ -3,13 +3,13 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
-  gem.name          = "fluent-plugin-docker_metadata_filter"
-  gem.version       = "0.1.3"
-  gem.authors       = ["Jimmi Dyson"]
-  gem.email         = ["jimmidyson@gmail.com"]
-  gem.description   = %q{Filter plugin to add Docker metadata}
-  gem.summary       = %q{Filter plugin to add Docker metadata}
-  gem.homepage      = "https://github.com/fabric8io/fluent-plugin-docker_metadata_filter"
+  gem.name          = "fluent-plugin-docker_metadata_elastic_filter"
+  gem.version       = "0.2.0"
+  gem.authors       = ["Jimmi Dyson","Hiroshi Hatake","Zsolt Fekete"]
+  gem.email         = ["zsoltf@me.com"]
+  gem.description   = %q{Filter plugin to add Docker metadata for use with Elasticsearch}
+  gem.summary       = %q{Filter plugin to add Docker metadata for use with Elasticsearch}
+  gem.homepage      = "https://github.com/zsoltf/fluent-plugin-docker_metadata_elastic_filter"
   gem.license       = "ASL2"
 
   gem.files         = `git ls-files`.split($/)

@@ -32,7 +32,7 @@ class DockerMetadataFilterTest < Test::Unit::TestCase
   end
 
   def create_driver(conf = '')
-    Test::Driver::Filter.new(Plugin::DockerMetadataFilter).configure(conf)
+    Test::Driver::Filter.new(Plugin::DockerMetadataElasticFilter).configure(conf)
   end
 
   sub_test_case 'configure' do

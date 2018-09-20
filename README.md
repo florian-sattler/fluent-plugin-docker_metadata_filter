@@ -1,13 +1,11 @@
-# THIS PLUGIN IS NO LONGER MAINTAINED - SORRY!
-
-# fluent-plugin-docker_metadata_filter, a plugin for [Fluentd](http://fluentd.org)
+# fluent-plugin-docker_metadata_elastic_filter, a plugin for [Fluentd](http://fluentd.org)
 [![Circle CI](https://circleci.com/gh/fabric8io/fluent-plugin-docker_metadata_filter.svg?style=svg)](https://circleci.com/gh/fabric8io/fluent-plugin-docker_metadata_filter)
 [![Code Climate](https://codeclimate.com/github/fabric8io/fluent-plugin-docker_metadata_filter/badges/gpa.svg)](https://codeclimate.com/github/fabric8io/fluent-plugin-docker_metadata_filter)
 [![Test Coverage](https://codeclimate.com/github/fabric8io/fluent-plugin-docker_metadata_filter/badges/coverage.svg)](https://codeclimate.com/github/fabric8io/fluent-plugin-docker_metadata_filter)
 
 ## Installation
 
-    gem install fluent-plugin-docker_metadata_filter
+    gem install fluent-plugin-docker_metadata_elastic_filter
 
 ## Configuration
 ```
@@ -22,7 +20,7 @@
 </source>
 
 <filter docker.var.lib.docker.containers.*.*.log>
-  type docker_metadata
+  type docker_metadata_elastic
 </filter>
 
 <match **>
