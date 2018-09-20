@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
   gem.name          = "fluent-plugin-docker_metadata_elastic_filter"
-  gem.version       = "0.2.0"
+  gem.version       = "0.2.1"
   gem.authors       = ["Jimmi Dyson","Hiroshi Hatake","Zsolt Fekete"]
   gem.email         = ["zsoltf@me.com"]
   gem.description   = %q{Filter plugin to add Docker metadata for use with Elasticsearch}
