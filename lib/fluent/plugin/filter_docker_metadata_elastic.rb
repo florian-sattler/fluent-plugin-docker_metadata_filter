@@ -49,6 +49,7 @@ module Fluent::Plugin
 
       @cache = LruRedux::ThreadSafeCache.new(@cache_size)
       @container_id_regexp_compiled = Regexp.compile(@container_id_regexp)
+      @hostname = ENV["HOSTNAME"]
     end
 
     def filter_stream(tag, es)
@@ -62,15 +63,13 @@ module Fluent::Plugin
           new_es = Fluent::MultiEventStream.new
 
           es.each {|time, record|
+            record['host'] = @hostname
             record['docker'] = {
               'id' => metadata['id'],
               'name' => metadata['Name'][1..-1],
               'container_hostname' => metadata['Config']['Hostname'],
               'image' => metadata['Config']['Image'],
-              'image_id' => metadata['Image'],
               'labels' => metadata['Config']['Labels'].map {|k,v| Hash[k.gsub('.','_'),v]}.inject({}, :merge),
-              'state' => metadata['State'],
-              'restart_count' => metadata['RestartCount']
             }
             new_es.add(time, record)
           }

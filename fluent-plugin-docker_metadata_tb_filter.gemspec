@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
   gem.name          = "fluent-plugin-docker_metadata_tb_filter"
-  gem.version       = "0.3.0"
+  gem.version       = "0.3.2"
   gem.authors       = ["Jimmi Dyson","Hiroshi Hatake","Zsolt Fekete", "TurboBridge"]
   gem.email         = ["info@turbobridge.com"]
   gem.description   = %q{Filter plugin to add Docker metadata for use with Elasticsearch}
@@ -16,7 +16,6 @@ Gem::Specification.new do |gem|
   gem.executables   = gem.files.grep(%r{^bin/}) { |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
-  gem.has_rdoc      = false
 
   gem.required_ruby_version = '>= 2.1.0'
 
