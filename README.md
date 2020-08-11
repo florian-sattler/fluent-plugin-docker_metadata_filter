@@ -56,6 +56,56 @@ Then output becomes as belows
   }
 }
 ```
+## Running in Docker
+Create and build a Dockerfile similar to the one below:
+```
+FROM fluent/fluentd:v1.11-1
+MAINTAINER <maintainer>
+
+USER root
+
+RUN apk add --no-cache --update --virtual .build-deps \
+        sudo build-base ruby-dev git \
+ # cutomize following instruction as you wish
+ && sudo gem install fluent-plugin-detect-exceptions \
+ && git clone https://github.com/corbanvilla/fluent-plugin-docker_metadata_filter.git \
+ && cd /fluent-plugin-docker_metadata_filter \
+ && gem build fluent-plugin-docker_metadata_tb_filter.gemspec \
+ && gem install fluent-plugin-docker_metadata_tb_filter-0.3.2.gem \
+ && sudo gem sources --clear-all \
+ && apk del .build-deps \
+ && rm -rf /home/fluent/.gem/ruby/2.5.0/cache/*.gem
+
+RUN mkdir /fluentd/pos/ \
+ && touch /fluentd/pos/docker.pos \
+ && chown fluent:fluent /fluentd/pos/docker.pos
+
+COPY entrypoint.sh /bin/
+COPY *.conf /fluentd/etc/
+
+# Has to run as root for docker_metadata to be able to query the socket...
+# Future updates should read from config.v2.json and will not need root
+#USER fluent
+```
+
+Then you can launch it with something like:
+
+```
+version: '3'
+services:
+  fluentd:
+    image: <my_image>
+    environment:
+    - HOSTNAME=
+    volumes:
+    - /var/lib/docker/containers/:/var/lib/docker/containers/:ro
+    - /var/run/docker.sock:/var/run/docker.sock
+    - pos-file:/fluentd/pos/
+
+volumes:
+  pos-file:
+```
+
 ## Running Tests
 ```
 bundle install
