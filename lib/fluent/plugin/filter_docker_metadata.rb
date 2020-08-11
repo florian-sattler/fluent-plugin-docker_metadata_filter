@@ -65,10 +65,10 @@ module Fluent::Plugin
           es.each {|time, record|
             record['host'] = @hostname
             record['docker'] = {
-              'id' => metadata['id'],
-              'name' => metadata['Name'][1..-1],
+              'container_id' => metadata['id'],
+              'container_name' => metadata['Name'][1..-1],
               'container_hostname' => metadata['Config']['Hostname'],
-              'image' => metadata['Config']['Image'],
+              'container_image' => metadata['Config']['Image'],
               # Labels add too much unnecessary data in my case
               #'labels' => metadata['Config']['Labels'].map {|k,v| Hash[k.gsub('.','_'),v]}.inject({}, :merge),
             }
