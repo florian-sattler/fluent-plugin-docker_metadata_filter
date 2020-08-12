@@ -4,12 +4,12 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
   gem.name          = "fluent-plugin-docker_metadata_tb_filter"
-  gem.version       = "0.3.2"
+  gem.version       = "0.3.3"
   gem.authors       = ["Jimmi Dyson","Hiroshi Hatake","Zsolt Fekete", "TurboBridge", "Animcogn"]
   gem.email         = ["corban@utos.org"]
-  gem.description   = %q{Filter plugin to add Docker metadata for use with Elasticsearch}
-  gem.summary       = %q{Filter plugin to add Docker metadata for use with Elasticsearch}
-  gem.homepage      = "https://github.com/corbanvilla/fluent-plugin-docker_metadata_elastic_filter"
+  gem.description   = %q{Filter plugin to add Docker metadata}
+  gem.summary       = %q{Filter plugin to add Docker metadata}
+  gem.homepage      = "https://github.com/corbanvilla/fluent-plugin-docker_metadata_filter"
   gem.license       = "Apache-2.0"
 
   gem.files         = `git ls-files`.split($/)
