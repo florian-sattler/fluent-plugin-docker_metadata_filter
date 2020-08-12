@@ -17,21 +17,19 @@
 # limitations under the License.
 #
 require 'fluent/plugin/filter'
+require 'json'
+require 'lru_redux'
 
 module Fluent::Plugin
   class DockerMetadataFilter < Fluent::Plugin::Filter
     Fluent::Plugin.register_filter('docker_metadata', self)
 
-    config_param :docker_url, :string,  :default => 'unix:///var/run/docker.sock'
+    config_param :docker_containers_path, :string, :default => '/var/lib/docker/containers'
     config_param :cache_size, :integer, :default => 100
     config_param :container_id_regexp, :string, :default => '(\w{64})'
 
-    def self.get_metadata(container_id)
-      begin
-        Docker::Container.get(container_id).info
-      rescue Docker::Error::NotFoundError
-        nil
-      end
+    def get_metadata(container_id)
+      get_docker_cfg_from_id(container_id) unless @id_to_docker_cfg.has_key? container_id
     end
 
     def initialize
@@ -41,15 +39,24 @@ module Fluent::Plugin
     def configure(conf)
       super
 
-      require 'docker'
-      require 'json'
-      require 'lru_redux'
-
-      Docker.url = @docker_url
+      @id_to_docker_cfg = {}
 
       @cache = LruRedux::ThreadSafeCache.new(@cache_size)
       @container_id_regexp_compiled = Regexp.compile(@container_id_regexp)
       @hostname = ENV["HOSTNAME"]
+    end
+
+    def get_docker_cfg_from_id(container_id)
+      begin
+        config_path = "#{@docker_containers_path}/#{container_id}/config.v2.json"
+        if not File.exists?(config_path)
+          config_path = "#{@docker_containers_path}/#{container_id}/config.json"
+        end
+        docker_cfg = JSON.parse(File.read(config_path))
+      rescue
+        docker_cfg = nil
+      end
+      docker_cfg
     end
 
     def filter_stream(tag, es)
@@ -57,7 +64,7 @@ module Fluent::Plugin
       container_id = tag.match(@container_id_regexp_compiled)
       if container_id && container_id[0]
         container_id = container_id[0]
-        metadata = @cache.getset(container_id){DockerMetadataFilter.get_metadata(container_id)}
+        metadata = @cache.getset(container_id){get_metadata(container_id)}
 
         if metadata
           new_es = Fluent::MultiEventStream.new
@@ -69,8 +76,6 @@ module Fluent::Plugin
               'container_name' => metadata['Name'][1..-1],
               'container_hostname' => metadata['Config']['Hostname'],
               'container_image' => metadata['Config']['Image'],
-              # Labels add too much unnecessary data in my case
-              #'labels' => metadata['Config']['Labels'].map {|k,v| Hash[k.gsub('.','_'),v]}.inject({}, :merge),
             }
             new_es.add(time, record)
           }
