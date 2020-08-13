@@ -81,8 +81,6 @@ RUN mkdir /fluentd/pos/ \
 
 COPY entrypoint.sh /bin/
 COPY *.conf /fluentd/etc/
-
-USER fluent
 ```
 
 Then you can launch it with something like:
@@ -102,7 +100,7 @@ volumes:
   pos-file:
 ```
 
-Note: This fork no longer uses the docker socket to add metadata, and instead uses the `config.v2.json` file. Access to the docker socket can provide root access to the host machine, and required the container to run as root.
+Note: This fork no longer uses the docker socket to add metadata, and instead uses the `config.v2.json` file. Access to the docker socket can provide root access to the host machine.
 
 ## Running Tests
 ```
