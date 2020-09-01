@@ -1,5 +1,8 @@
 # fluent-plugin-docker_metadata_filter, a plugin for [Fluentd](http://fluentd.org)
 
+## Note
+I'm not a ruby developer... please don't judge my code :)
+
 ## Installation
 
 I still need to build an official gem... for the time being you have to build this yourself.
