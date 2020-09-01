@@ -82,6 +82,7 @@ module Fluent::Plugin
               'swarm_namespace' => swarm_namespace,
               'service_name' => service_name,
             }
+          }
         end
       end
       return new_es
