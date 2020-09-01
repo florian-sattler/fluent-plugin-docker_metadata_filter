@@ -72,14 +72,17 @@ module Fluent::Plugin
 
           es.each {|time, record|
             record['host'] = @hostname
+            swarm_namespace = metadata['Config']['Labels']['com.docker.stack.namespace'] || @fallback_key
+            service_name = metadata['Config']['Labels']['com.docker.swarm.service.name'] || @fallback_key
             record['docker'] = {
               'container_id' => metadata['id'],
               'container_name' => metadata['Name'][1..-1],
               'container_hostname' => metadata['Config']['Hostname'],
               'container_image' => metadata['Config']['Image'],
-              'swarm_namespace' => metadata['Config']['Labels']['com.docker.stack.namespace'] || @fallback_key,
-              'service_name' => metadata['Config']['Labels']['com.docker.swarm.service.name'] || @fallback_key,
+              'swarm_namespace' => swarm_namespace,
+              'service_name' => service_name,
             }
+            if
           }
         end
       end
