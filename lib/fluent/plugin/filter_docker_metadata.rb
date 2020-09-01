@@ -27,6 +27,7 @@ module Fluent::Plugin
     config_param :docker_containers_path, :string, :default => '/var/lib/docker/containers'
     config_param :cache_size, :integer, :default => 100
     config_param :container_id_regexp, :string, :default => '(\w{64})'
+    config_param :fallback_key, :string, :default => 'unknown'
 
     def get_metadata(container_id)
       get_docker_cfg_from_id(container_id) unless @id_to_docker_cfg.has_key? container_id
@@ -76,8 +77,8 @@ module Fluent::Plugin
               'container_name' => metadata['Name'][1..-1],
               'container_hostname' => metadata['Config']['Hostname'],
               'container_image' => metadata['Config']['Image'],
-              'swarm_namespace' => metadata['Config']['Labels']['com.docker.stack.namespace'] || 'None',
-              'service_name' => metadata['Config']['Labels']['com.docker.swarm.service.name'] || 'None',
+              'swarm_namespace' => metadata['Config']['Labels']['com.docker.stack.namespace'] || @fallback_key,
+              'service_name' => metadata['Config']['Labels']['com.docker.swarm.service.name'] || @fallback_key,
             }
           }
         end
