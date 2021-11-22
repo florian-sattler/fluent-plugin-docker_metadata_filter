@@ -73,7 +73,7 @@ module Fluent::Plugin
           es.each {|time, record|
             record['host'] = @hostname
             record['docker'] = {
-              'container_id' => metadata['id'],
+              'container_id' => metadata['ID'],
               'container_name' => metadata['Name'][1..-1],
               'container_hostname' => metadata['Config']['Hostname'],
               'container_image' => metadata['Config']['Image'],
