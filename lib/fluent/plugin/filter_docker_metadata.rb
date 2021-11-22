@@ -77,8 +77,7 @@ module Fluent::Plugin
               'container_name' => metadata['Name'][1..-1],
               'container_hostname' => metadata['Config']['Hostname'],
               'container_image' => metadata['Config']['Image'],
-              'swarm_namespace' => metadata['Config']['Labels']['com.docker.stack.namespace'] || @fallback_key,
-              'service_name' => metadata['Config']['Labels']['com.docker.swarm.service.name'] || @fallback_key,
+              'labels' => metadata['Config']['Labels'] || @fallback_key,
             }
             new_es.add(time, record)
           }
